@@ -21,12 +21,23 @@ body {
     justify-content: center;
 }
 
-.row-items {
+.row-items-disable {
+    display: none;
+    align-items: center;
+    background-color: rgb(197, 190, 190);
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.row-items-able {
     display: flex;
     align-items: center;
     background-color: rgb(197, 190, 190);
     margin-top: 20px;
+    border-radius: 5px;
 }
+
+
 
 .task-items {
     width: 100%;
@@ -160,7 +171,6 @@ body {
 }
 
 #button {
-    margin-right: 200px;
     background-color: rgb(85, 85, 187);
 }
 
@@ -234,4 +244,8 @@ input {
 
 .container-button {
     margin: 0 5%
+}
+
+.edit-button {
+    width: 100px;
 }

@@ -8,40 +8,6 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <!-- <div class="container-notes">
-      
-        <div class="container-nav">
-          <div class="items">
-            <div class="sections">Name</div>
-            <div class="sections">Craeted</div>
-            <div class="sections">Category</div>
-            <div class="sections">Content</div>
-            <div class="sections">Dates</div>
-            <div class="icons">
-              <div><img src="images/icons/icons8-архив-48.png" /></div>
-              <div><img src="images/icons/icons8-корзина-50.png" /></div>
-            </div>
-          </div>
-        </div>
-        <div class="notes">
-          <div class="icons task-items">
-            <img src="images/icons/icones-notes/icons8-корзина-50.png" />
-            <span class="title">Shoping list</span>
-          </div>
-          <div class="main-part">
-            <span class="created-data task-items">April 20,2021</span>
-            <span class="task task-items">Task</span>
-            <span class="content task-items">Tomatoes, bread</span>
-            <span class="dates task-items">Dates</span>
-          </div>
-          <div class="icons-notes">
-            <img src="images/icons/icones-notes/icons8-редактировать-50.png" />
-            <img src="images/icons/icons8-архив-48.png" />
-            <img src="images/icons/icons8-корзина-50.png" />
-          </div>
-        </div>
-    </div> -->
-
     <div class="container conteiner-notes">
       <div class="row items">
         <div class="col-sm">
@@ -63,9 +29,9 @@
               <img src="images/icons/icons8-корзина-50.png" />
         </div>
       </div>
-      <div class='row row-items'>
+      <!-- <div class='row row-items-disable'>
          <div class="col-sm">
-          <img src="images/icons/icones-notes/icons8-корзина-50.png" />
+          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
           <span class="title">Shoping list</span>
         </div>
         <div class="col-sm">
@@ -82,57 +48,64 @@
               <span class="dates">Dates</span>
         </div>
             <div class="col-sm">
-              <img src="images/icons/icones-notes/icons8-редактировать-50.png" />
+              <img src="images/icons/icones-notes/icons8-редактировать-50.png" id="edit" />
               <img src="images/icons/icons8-архив-48.png" />
               <img src="images/icons/icons8-корзина-50.png" />
-        </div>
+            </div>
+            </div> -->
+            
+            <div id="tasks"></div>
+
+                      </div>
+
+
+<!-------------------------Clone------------------------------>
+<!-- <div class='row row-items-disable'>
+  <div class="col-sm">
+   <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
+   <span class="title">Shoping list</span>
+ </div>
+ <div class="col-sm">
+   <span class="created-data">April 20,2021</span>
+ </div>
+ <div class="col-sm">
+   <span class="task">Task</span>
+ </div>
+     <div class="col-sm">
+       <span class="content">Tomatoes, bread</span>
+
+ </div>
+     <div class="col-sm">
+       <span class="dates">Dates</span>
+ </div>
+     <div class="col-sm">
+       <img src="images/icons/icones-notes/icons8-редактировать-50.png" id="edit" />
+       <img src="images/icons/icons8-архив-48.png" />
+       <img src="images/icons/icons8-корзина-50.png" />
+     </div>
+     </div> -->
+<!------------------------------------------------------------------------------------------>
+
+                      <div class="container">
+                        <div class="row mt-3">
+        
+                          <div class="col-12 d-flex justify-content-end p-0">
+                            <button
+                          type="button"
+                          class="btn btn-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModal"
+                          id="button"
+                        >
+                          Create Note
+                        </button>
+                          </div>
+                        </div>
+                      </div>
       </div>
     </div>
   
-    
- 
-      <!------------------------------------------->
-      <!-- <div class="container">
-        <div class="row">
-          <div class="col-sm">
-            
-          </div>
-          <div class="col-sm">
-            
-          </div>
-          <div class="col-sm button-send">
-            <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-        id="button"
-      >
-        Create Note
-      </button>
-          </div>
-        </div>
-      </div> -->
-
-      <div class="container-button">
-        <div class="button-item"></div>
-        <div class="button-item"></div>
-        <div class="button-item">
-          <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-        id="button"
-      >
-        Create Note
-      </button>
-
-        </div>
-        
-      </div>
-    
-      <!-- Modal -->
+      <!--- Modal window create notes--->
       <div
         class="modal fade"
         id="exampleModal"
@@ -152,7 +125,7 @@
               ></button>
             </div>
             <div class="input-container">
-              <input class="modal-body" type="text" placeholder="Name" data-key="name" ></input>
+              <input class="modal-body" type="text" placeholder="Name" data-key="name"  ></input>
               <input class="modal-body" type="text" placeholder="Craeted" data-key="created"></input>
               <input class="modal-body" type="text" placeholder="Category" data-key="category"></input>
               <input class="modal-body" type="text" placeholder="Content" data-key="content"></input>
@@ -173,6 +146,43 @@
           </div>
         </div>
       </div>
+      <!--------Modal window create notes------------------------------>
+    
+      <!--------Modal window edit notes-------------------------------->
+      <div
+        class="modal fade modal-window-edit"
+        id="exampleModa2"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content container-tasks">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit notes list</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="input-container">
+              <input class="modal-body name-item" type="text" placeholder="Name"></input>
+              <input class="modal-body created-item" type="text" placeholder="Created"></input>
+              <input class="modal-body category-item" type="text" placeholder="Category"></input>
+              <input class="modal-body content-item" type="text" placeholder="Content"></input>
+              <input class="modal-body dates-item" type="text" placeholder="Dates"></input>
+          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary edit-button" id="modal-edit">
+                Edit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--------Modal window edit notes-------------------------------->
     
 
     <!--Archive sections----------------------------------->
