@@ -207,6 +207,7 @@ input {
     background-color: rgb(197, 190, 190);
     margin-top: 20px;
     border-radius: 5px;
+    padding: 10px;
 }
 
 .image-text-item {
@@ -248,4 +249,13 @@ input {
 
 .edit-button {
     width: 100px;
+}
+
+.archive-section {
+    display: flex;
+    justify-content: end;
+}
+
+.archive-tasks-container {
+    padding: 25px;
 }

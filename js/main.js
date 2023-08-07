@@ -3,6 +3,19 @@ let inputs = document.querySelectorAll("input");
 let rowItems = document.querySelector(".row-items-disable");
 let containerNotes = document.querySelector(".conteiner-notes");
 let clone = null;
+let archive = "inactive";
+let archiveArr = [];
+let addTaskToArchive = [];
+let map;
+let tasks = null;
+let activeTasks = document.querySelector(".active-tasks");
+let checkOutArchiveTasks = document.querySelector(".archive-button");
+let archiveContainer = document.querySelector(".archive-dates");
+let archiveTaskContainer = document.querySelector(".archive-tasks-container");
+
+document.addEventListener("DOMContentLoaded", function () {
+  activeTasks.textContent = ourTasks.length;
+});
 
 let ourTasks = [
   {
@@ -13,6 +26,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-корзина-50.png",
+    archive: archive,
   },
   {
     name: "The theory of evolution",
@@ -22,6 +36,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-головной-мозг-48.png",
+    archive: archive,
   },
   {
     name: "New Feature",
@@ -31,6 +46,7 @@ let ourTasks = [
     dates: "3/5/2021, 5/5/2021",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-экологичные-технологии-48.png",
+    archive: archive,
   },
   {
     name: "William Gaddist",
@@ -40,6 +56,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-открытая-книга-48.png",
+    archive: archive,
   },
   {
     name: "Books",
@@ -49,6 +66,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-шапка-выпускника-48.png",
+    archive: archive,
   },
   {
     name: "Task",
@@ -58,6 +76,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-корзина-50.png",
+    archive: archive,
   },
   {
     name: "Random Thought",
@@ -67,6 +86,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-экологичные-технологии-48.png",
+    archive: archive,
   },
 ];
 
@@ -92,6 +112,7 @@ function createTask() {
   });
   ourTasks.push(objNotes);
   render();
+  activeTasks.textContent = ourTasks.length;
 }
 
 let edit = document.querySelector(".edit");
@@ -101,23 +122,23 @@ let modal = new bootstrap.Modal(document.getElementById("exampleModa2"));
 containerNotes.addEventListener("click", function (event) {
   if (event.target.id === "edit") {
     modal.show();
-  }
-  let col = event.target.parentElement;
-  let row = col.parentElement;
-  let rowId = row.getAttribute("data-id");
-  document.getElementById("modal-edit").setAttribute("data-row-id", rowId);
-  let currentTask = getTask(rowId);
-  let inputName = document.querySelector(".name-item");
-  let createdItem = document.querySelector(".created-item");
-  let category = document.querySelector(".category-item");
-  let content = document.querySelector(".content-item");
-  let date = document.querySelector(".dates-item");
+    let col = event.target.parentElement;
+    let row = col.parentElement;
+    let rowId = row.getAttribute("data-id");
+    document.getElementById("modal-edit").setAttribute("data-row-id", rowId);
+    let currentTask = getTask(rowId);
+    let inputName = document.querySelector(".name-item");
+    let createdItem = document.querySelector(".created-item");
+    let category = document.querySelector(".category-item");
+    let content = document.querySelector(".content-item");
+    let date = document.querySelector(".dates-item");
 
-  inputName.value = currentTask.name;
-  createdItem.value = currentTask.created;
-  category.value = currentTask.category;
-  content.value = currentTask.content;
-  date.value = currentTask.dates;
+    inputName.value = currentTask.name;
+    createdItem.value = currentTask.created;
+    category.value = currentTask.category;
+    content.value = currentTask.content;
+    date.value = currentTask.dates;
+  }
 });
 
 function getTask(rowId) {
@@ -152,7 +173,7 @@ editModal.addEventListener("click", function (event) {
 });
 
 function render() {
-  const tasks = document.getElementById("tasks");
+  tasks = document.getElementById("tasks");
   tasks.replaceChildren();
   ourTasks.forEach((data) => {
     const rowHTML = createRow(data);
@@ -162,7 +183,7 @@ function render() {
 
 function createRow(data) {
   const rowHTML = `
-    <div class='row row-items-able' data-id="${data.id}">
+    <div class='row row-items-able' data-id="${data.id}" data-archive=${data.archive}">
       <div class="col-sm">
         <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
         <span class="title">${data.name}</span>
@@ -181,11 +202,77 @@ function createRow(data) {
       </div>
       <div class="col-sm">
         <img src="images/icons/icones-notes/icons8-редактировать-50.png" id="edit" />
-        <img src="images/icons/icons8-архив-48.png" />
-        <img src="images/icons/icons8-корзина-50.png" />
+        <img src="images/icons/icons8-архив-48.png" id="archive" />
+        <img src="images/icons/icons8-корзина-50.png" id="basket" />
       </div>
     </div>
   `;
 
   return rowHTML;
 }
+
+let bascket = document.getElementById("basket");
+
+containerNotes.addEventListener("click", function removeTasks(event) {
+  if (event.target.id === "basket") {
+    let col = event.target.parentElement;
+    let row = col.parentElement;
+    let rowId = row.getAttribute("data-id");
+    let currentTask = getTask(rowId);
+    ourTasks = ourTasks.filter((obj) => obj.id !== currentTask.id);
+    render();
+    activeTasks.textContent = ourTasks.length;
+  }
+});
+
+let archiveButton = document.getElementById("archive");
+let countArchiveTasks = document.querySelector(".archive-tasks");
+
+tasks.addEventListener("click", function addToArchive(event) {
+  if (event.target.id === "archive") {
+    let col = event.target.parentElement;
+    let row = col.parentElement;
+    let rowArchive = row.getAttribute("data-id");
+    let currentTaskArchive = getTask(rowArchive);
+    archiveArr.push(
+      ourTasks.filter((obj) => obj.id === currentTaskArchive.id)[0]
+    );
+    ourTasks = ourTasks.filter((obj) => obj.id !== currentTaskArchive.id);
+    render();
+    countArchiveTasks.textContent = archiveArr.length;
+    activeTasks.textContent = ourTasks.length;
+  }
+});
+
+archiveContainer.addEventListener("click", function getArchiveTasks(event) {
+  if (event.target.tagName === "BUTTON") {
+    let uniqueArr = archiveArr.filter(
+      (obj1) => !addTaskToArchive.some((obj2) => obj2.id === obj1.id)
+    );
+    uniqueArr.forEach(function (obj) {
+      archiveTaskContainer.innerHTML += `
+      <div class='row row-items-able' data-id="${obj.id}">
+      <div class="col-sm">
+        <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
+        <span class="title">${obj.name}</span>
+      </div>
+      <div class="col-sm">
+        <span class="created-data">${obj.created}</span>
+      </div>
+      <div class="col-sm">
+        <span class="task">${obj.category}</span>
+      </div>
+      <div class="col-sm">
+        <span class="content">${obj.content}</span>
+      </div>
+      <div class="col-sm">
+        <span class="dates">${obj.dates}</span>
+      </div>
+    </div>
+      `;
+      addTaskToArchive.push(obj);
+    });
+  }
+});
+
+// let arr = [{name:1}, {id: 2}]

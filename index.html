@@ -29,80 +29,25 @@
               <img src="images/icons/icons8-корзина-50.png" />
         </div>
       </div>
-      <!-- <div class='row row-items-disable'>
-         <div class="col-sm">
-          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
-          <span class="title">Shoping list</span>
-        </div>
-        <div class="col-sm">
-          <span class="created-data">April 20,2021</span>
-        </div>
-        <div class="col-sm">
-          <span class="task">Task</span>
-        </div>
-            <div class="col-sm">
-              <span class="content">Tomatoes, bread</span>
-
-        </div>
-            <div class="col-sm">
-              <span class="dates">Dates</span>
-        </div>
-            <div class="col-sm">
-              <img src="images/icons/icones-notes/icons8-редактировать-50.png" id="edit" />
-              <img src="images/icons/icons8-архив-48.png" />
-              <img src="images/icons/icons8-корзина-50.png" />
-            </div>
-            </div> -->
-            
-            <div id="tasks"></div>
-
-                      </div>
-
-
-<!-------------------------Clone------------------------------>
-<!-- <div class='row row-items-disable'>
-  <div class="col-sm">
-   <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
-   <span class="title">Shoping list</span>
- </div>
- <div class="col-sm">
-   <span class="created-data">April 20,2021</span>
- </div>
- <div class="col-sm">
-   <span class="task">Task</span>
- </div>
-     <div class="col-sm">
-       <span class="content">Tomatoes, bread</span>
-
- </div>
-     <div class="col-sm">
-       <span class="dates">Dates</span>
- </div>
-     <div class="col-sm">
-       <img src="images/icons/icones-notes/icons8-редактировать-50.png" id="edit" />
-       <img src="images/icons/icons8-архив-48.png" />
-       <img src="images/icons/icons8-корзина-50.png" />
-     </div>
-     </div> -->
-<!------------------------------------------------------------------------------------------>
-
-                      <div class="container">
-                        <div class="row mt-3">
-        
-                          <div class="col-12 d-flex justify-content-end p-0">
-                            <button
-                          type="button"
-                          class="btn btn-primary"
-                          data-bs-toggle="modal"
-                          data-bs-target="#exampleModal"
-                          id="button"
-                        >
-                          Create Note
-                        </button>
-                          </div>
-                        </div>
-                      </div>
+        <div id="tasks"></div>
       </div>
+
+    <div class="container">
+        <div class="row mt-3">
+          <div class="col-12 d-flex justify-content-end p-0">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              id="button"
+                        >
+              Create Note
+            </button>
+          </div>
+        </div>
+    </div>
+    </div>
     </div>
   
       <!--- Modal window create notes--->
@@ -125,7 +70,7 @@
               ></button>
             </div>
             <div class="input-container">
-              <input class="modal-body" type="text" placeholder="Name" data-key="name"  ></input>
+              <input class="modal-body" type="text" placeholder="Name" data-key="name"></input>
               <input class="modal-body" type="text" placeholder="Craeted" data-key="created"></input>
               <input class="modal-body" type="text" placeholder="Category" data-key="category"></input>
               <input class="modal-body" type="text" placeholder="Content" data-key="content"></input>
@@ -188,29 +133,42 @@
     <!--Archive sections----------------------------------->
     <div class="container">
       <div class="row archive-items">
-        <div class="col-sm">
+        <div class="col-3">
           Note Category
         </div>
-        <div class="col-sm">
+        <div class="col-3">
           Active
         </div>
-        <div class="col-sm">
+        <div class="col-3">
           Archived
         </div>
+        <div class="col-3"></div>
       </div>
       <div class="row archive-dates">
-        <div class="col-sm image-text-item">
+        <div class="col-3 image-text-item">
           <img src="images/icons/icones-notes/icons8-корзина-50.png" />
           <div>Task</div>
         </div>
-        <div class="col-sm">
-          13
+        <div class="col-3 active-tasks">
+          0
         </div>
-        <div class="col-sm">
-          4
+        <div class="col-3 archive-tasks">
+          0
+        </div>
+        <div class="col-3 archive-section">
+            <button
+              type="button"
+              class="btn btn-primary archive-button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal3"
+              id="button"
+                        >
+              Check out archive tasks
+            </button>
+          
         </div>
       </div>
-      <div class="row random-thought-section">
+      <!-- <div class="row random-thought-section">
         <div class="col-sm image-text-item">
           <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" />
           <div>Random Thought</div>
@@ -221,39 +179,26 @@
         <div class="col-sm">
           12
         </div>
+      </div> -->
+    </div>
+<!--------------Archive modal window------------------------------------------------------->
+<div class="modal" tabindex="-1" id="exampleModal3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Archive tasks</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body archive-tasks-container"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Unarchive</button>
       </div>
     </div>
-    
-    <!-- <div class="container-archive">
-      <div class="titles-archive">
-        <div>Note Category</div>
-        <div>Active</div>
-        <div>Archived</div>
-      </div>
-    </div> -->
-    <!-- <div class="container-task-archive">
-      <div class="task-archive">
-        <div class="icon-text-archive">
-          <img src="images/icons/icones-notes/icons8-корзина-50.png" alt="" />
-          <div>Task</div>
-        </div>
-        <div>7</div>
-        <div>12</div>
-      </div>
-    </div>
-    <div class="container-random-thought">
-      <div class="random-thought-text">
-        <div class="icon-text-random-thought">
-          <img
-            src="images/icons/icones-notes/icons8-экологичные-технологии-48.png"
-            alt=""
-          />
-          <div class="random-thought">Random Thought</div>
-        </div>
-        <div class="active">7</div>
-        <div class="archived">12</div>
-      </div>
-    </div> -->
+  </div>
+</div>
+
+<!-------------------------------------------------------------------------------------------->
   <script src="js/bootstrap.bundle.js"></script>
 
     <script src="js/main.js"></script>
