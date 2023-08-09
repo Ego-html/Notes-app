@@ -5,9 +5,12 @@ let containerNotes = document.querySelector(".conteiner-notes");
 let clone = null;
 let archive = "inactive";
 let archiveArr = [];
-let addTaskToArchive = [];
+let removeTaskFromArchive;
 let addTaskToActive;
 let arrTasksFromActiveToArchive = [];
+let uniqueArchiveTasks;
+let archiveTasks;
+let uniqueTasks;
 let uniqueArr;
 let map;
 let tasks = null;
@@ -180,7 +183,8 @@ editModal.addEventListener("click", function (event) {
 function render() {
   tasks = document.getElementById("tasks");
   tasks.replaceChildren();
-  ourTasks.forEach((data) => {
+  uniqueTasks = new Set(ourTasks);
+  uniqueTasks.forEach((data) => {
     const rowHTML = createRow(data);
     tasks.innerHTML += rowHTML;
   });
@@ -266,7 +270,6 @@ tasks.addEventListener("click", function addToArchive(event) {
     archiveArr.push(
       ourTasks.filter((obj) => obj.id === currentTaskArchive.id)[0]
     );
-    //==================================================================
     let colImagesTitle = row.firstElementChild;
     let childrenColImagesTitle = colImagesTitle.children;
     let img = childrenColImagesTitle[0].src;
@@ -280,11 +283,105 @@ tasks.addEventListener("click", function addToArchive(event) {
 
 archiveContainer.addEventListener("click", function getArchiveTasks(event) {
   if (event.target.tagName === "BUTTON") {
-    uniqueArr = archiveArr.filter(
-      (obj1) => !addTaskToArchive.some((obj2) => obj2.id === obj1.id)
-    );
-    uniqueArr.forEach(function (obj) {
-      archiveTaskContainer.innerHTML += `
+    console.log(removeTaskFromArchive);
+    if (removeTaskFromArchive) {
+      archiveTaskContainer.replaceChildren();
+      removeTaskFromArchive.forEach(function (obj) {
+        archiveTaskContainer.innerHTML += `
+        <div class='row row-items-able row-checkbox' data-id="${obj.id}">
+        <div class="col-2">
+          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
+          <span class="title">${obj.name}</span>
+        </div>
+        <div class="col-2">
+          <span class="created-data">${obj.created}</span>
+        </div>
+        <div class="col-2">
+          <span class="task">${obj.category}</span>
+        </div>
+        <div class="col-2">
+          <span class="content">${obj.content}</span>
+        </div>
+        <div class="col-2">
+          <span class="dates">${obj.dates}</span>
+        </div>
+        <div class="form-check col-2">
+    <input class="form-check-input inputs-checkbox" type="checkbox" value="">
+    
+  </div>
+  <div class="form-check">
+   
+  </div>
+      </div>
+        `;
+      });
+    } else {
+      arrTasksFromActiveToArchive.forEach(function (obj) {
+        archiveTaskContainer.innerHTML += `
+        <div class='row row-items-able row-checkbox' data-id="${obj.id}">
+        <div class="col-2">
+          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
+          <span class="title">${obj.name}</span>
+        </div>
+        <div class="col-2">
+          <span class="created-data">${obj.created}</span>
+        </div>
+        <div class="col-2">
+          <span class="task">${obj.category}</span>
+        </div>
+        <div class="col-2">
+          <span class="content">${obj.content}</span>
+        </div>
+        <div class="col-2">
+          <span class="dates">${obj.dates}</span>
+        </div>
+        <div class="form-check col-2">
+    <input class="form-check-input inputs-checkbox" type="checkbox" value="">
+    
+  </div>
+  <div class="form-check">
+  </div>
+      </div>
+        `;
+        let uniqueElements = {};
+        let rowElements = document.querySelectorAll(".row-checkbox");
+        let uniqueRow = Array.from(rowElements);
+
+        for (let i = 0; i < uniqueRow.length; i++) {
+          let id = uniqueRow[i].getAttribute("data-id");
+          uniqueElements[id] = uniqueRow[i];
+        }
+        archiveTaskContainer.innerHTML = "";
+        for (let key in uniqueElements) {
+          archiveTaskContainer.appendChild(uniqueElements[key].cloneNode(true));
+        }
+      });
+    }
+  }
+});
+
+let unarchiveButton = document.querySelector(".unarchive");
+
+unarchiveButton.addEventListener("click", function () {
+  let inputsCheckbox = document.querySelectorAll(".inputs-checkbox");
+  for (let i = 0; i < inputsCheckbox.length; i++) {
+    if (inputsCheckbox[i].checked) {
+      let col = inputsCheckbox[i].parentElement;
+      let row = col.parentElement;
+      arrIdArchive.push(row.getAttribute("data-id"));
+    }
+  }
+  addTaskToActive = arrTasksFromActiveToArchive.filter((item) =>
+    arrIdArchive.includes(item.id)
+  );
+  addTaskToActive.forEach((item) => ourTasks.push(item));
+  removeTaskFromArchive = arrTasksFromActiveToArchive.filter(
+    (item) => !arrIdArchive.includes(item.id)
+  );
+  render();
+  archiveTaskContainer.replaceChildren();
+  removeTaskFromArchive.forEach(function (obj) {
+    archiveTaskContainer.innerHTML += `
       <div class='row row-items-able row-checkbox' data-id="${obj.id}">
       <div class="col-2">
         <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
@@ -304,67 +401,14 @@ archiveContainer.addEventListener("click", function getArchiveTasks(event) {
       </div>
       <div class="form-check col-2">
   <input class="form-check-input inputs-checkbox" type="checkbox" value="">
-  
-</div>
-<div class="form-check">
- 
-</div>
+
+  </div>
+  <div class="form-check">
+
+  </div>
     </div>
       `;
-      addTaskToArchive.push(obj);
-    });
-  }
-});
-
-let unarchiveButton = document.querySelector(".unarchive");
-
-unarchiveButton.addEventListener("click", function () {
-  let inputsCheckbox = document.querySelectorAll(".inputs-checkbox");
-  for (let i = 0; i < inputsCheckbox.length; i++) {
-    if (inputsCheckbox[i].checked) {
-      let col = inputsCheckbox[i].parentElement;
-      let row = col.parentElement;
-      arrIdArchive.push(row.getAttribute("data-id"));
-    }
-  }
-
-  uniqueArr = uniqueArr.filter(
-    (obj1) => !arrIdArchive.some((item) => item === obj1.id)
-  );
-  archiveTaskContainer.replaceChildren();
-  uniqueArr.forEach(function (obj) {
-    archiveTaskContainer.innerHTML += `
-    <div class='row row-items-able row-checkbox' data-id="${obj.id}">
-    <div class="col-2">
-      <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
-      <span class="title">${obj.name}</span>
-    </div>
-    <div class="col-2">
-      <span class="created-data">${obj.created}</span>
-    </div>
-    <div class="col-2">
-      <span class="task">${obj.category}</span>
-    </div>
-    <div class="col-2">
-      <span class="content">${obj.content}</span>
-    </div>
-    <div class="col-2">
-      <span class="dates">${obj.dates}</span>
-    </div>
-    <div class="form-check col-2">
-<input class="form-check-input inputs-checkbox" type="checkbox" value="">
-
-</div>
-<div class="form-check">
-
-</div>
-  </div>
-    `;
-    addTaskToActive = arrTasksFromActiveToArchive.filter((item) =>
-      arrIdArchive.includes(item.id)
-    );
-    addTaskToActive.forEach((item) => ourTasks.push(item));
-    render();
-    addTaskToActive = null;
   });
+  activeTasks.textContent = uniqueTasks.size;
+  countArchiveTasks.textContent = removeTaskFromArchive.length;
 });
