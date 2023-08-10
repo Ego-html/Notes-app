@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Note app</title>
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css"> -->
+
+    <!-- <link rel="stylesheet" href="bootstrap-5.0.2-dist (1)/airdatepiker3_files/airdatepicker/"> -->
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script src="js/jquary.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
     <link href="css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -74,7 +82,7 @@
               <input class="modal-body" type="text" placeholder="Craeted" data-key="created"></input>
               <input class="modal-body" type="text" placeholder="Category" data-key="category"></input>
               <input class="modal-body" type="text" placeholder="Content" data-key="content"></input>
-              <input class="modal-body" type="text" placeholder="Dates" data-key="dates"></input>
+              <input class="modal-body" type="text" placeholder="Dates" data-key="dates" id="datepicker" ></input>
           </div>
             <div class="modal-footer">
               <button
@@ -129,7 +137,6 @@
       </div>
       <!--------Modal window edit notes-------------------------------->
     
-
     <!--Archive sections----------------------------------->
     <div class="container">
       <div class="row archive-items">
@@ -165,21 +172,8 @@
                         >
               Check out archive tasks
             </button>
-          
-        </div>
+         </div>
       </div>
-      <!-- <div class="row random-thought-section">
-        <div class="col-sm image-text-item">
-          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" />
-          <div>Random Thought</div>
-        </div>
-        <div class="col-sm">
-          7
-        </div>
-        <div class="col-sm">
-          12
-        </div>
-      </div> -->
     </div>
 <!--------------Archive modal window------------------------------------------------------->
 <div class="modal" tabindex="-1" id="exampleModal3">
@@ -198,9 +192,8 @@
   </div>
 </div>
 
-<!-------------------------------------------------------------------------------------------->
-  <script src="js/bootstrap.bundle.js"></script>
-
-    <script src="js/main.js"></script>
+   <script src="js/bootstrap.bundle.js"></script>
+   <script src="js/main.js"></script>
+    
   </body>
 </html>

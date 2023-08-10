@@ -2,28 +2,14 @@ let buttonCreateTask = document.getElementById("send");
 let inputs = document.querySelectorAll("input");
 let rowItems = document.querySelector(".row-items-disable");
 let containerNotes = document.querySelector(".conteiner-notes");
-let clone = null;
-let archive = "inactive";
-let archiveArr = [];
-let removeTaskFromArchive;
-let addTaskToActive;
-let arrTasksFromActiveToArchive = [];
-let uniqueArchiveTasks;
 let archiveTasks;
-let uniqueTasks;
-let uniqueArr;
-let map;
 let tasks = null;
-let arrIdArchive = [];
-let arrAddToArchiveTasks = [];
-let activeTasks = document.querySelector(".active-tasks");
 let checkOutArchiveTasks = document.querySelector(".archive-button");
 let archiveContainer = document.querySelector(".archive-dates");
 let archiveTaskContainer = document.querySelector(".archive-tasks-container");
 
-document.addEventListener("DOMContentLoaded", function () {
-  activeTasks.textContent = ourTasks.length;
-});
+let countArchiveTasks = document.querySelector(".archive-tasks");
+let activeTasks = document.querySelector(".active-tasks");
 
 let ourTasks = [
   {
@@ -34,7 +20,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-корзина-50.png",
-    archive: archive,
+    isArchive: false,
   },
   {
     name: "The theory of evolution",
@@ -44,7 +30,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-головной-мозг-48.png",
-    archive: archive,
+    isArchive: false,
   },
   {
     name: "New Feature",
@@ -54,7 +40,7 @@ let ourTasks = [
     dates: "3/5/2021, 5/5/2021",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-экологичные-технологии-48.png",
-    archive: archive,
+    isArchive: false,
   },
   {
     name: "William Gaddist",
@@ -64,7 +50,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-открытая-книга-48.png",
-    archive: archive,
+    isArchive: false,
   },
   {
     name: "Books",
@@ -74,7 +60,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-шапка-выпускника-48.png",
-    archive: archive,
+    isArchive: false,
   },
   {
     name: "Task",
@@ -84,7 +70,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-корзина-50.png",
-    archive: archive,
+    isArchive: false,
   },
   {
     name: "Random Thought",
@@ -94,7 +80,7 @@ let ourTasks = [
     dates: "",
     id: (Math.random() + 1).toString(36).substring(7),
     src: "images/icons/icones-notes/icons8-экологичные-технологии-48.png",
-    archive: archive,
+    isArchive: false,
   },
 ];
 
@@ -103,6 +89,10 @@ render();
 buttonCreateTask.addEventListener("click", createTask);
 
 function createTask() {
+  $(function () {
+    $("#datepicker").datepicker();
+  });
+
   let objNotes = {
     name: null,
     created: null,
@@ -110,6 +100,7 @@ function createTask() {
     content: null,
     dates: null,
     id: (Math.random() + 1).toString(36).substring(7),
+    isArchive: false,
   };
   inputs.forEach((input) => {
     const key = input.dataset.key;
@@ -119,19 +110,15 @@ function createTask() {
     }
   });
   ourTasks.push(objNotes);
+
   render();
-  activeTasks.textContent = ourTasks.length;
 }
-
-let edit = document.querySelector(".edit");
-
-let modal = new bootstrap.Modal(document.getElementById("exampleModa2"));
 
 containerNotes.addEventListener("click", function (event) {
   if (event.target.id === "edit") {
+    let modal = new bootstrap.Modal(document.getElementById("exampleModa2"));
     modal.show();
-    let col = event.target.parentElement;
-    let row = col.parentElement;
+    let row = event.target.parentElement.parentElement;
     let rowId = row.getAttribute("data-id");
     document.getElementById("modal-edit").setAttribute("data-row-id", rowId);
     let currentTask = getTask(rowId);
@@ -140,6 +127,7 @@ containerNotes.addEventListener("click", function (event) {
     let category = document.querySelector(".category-item");
     let content = document.querySelector(".content-item");
     let date = document.querySelector(".dates-item");
+    date.id = "datepicker";
 
     inputName.value = currentTask.name;
     createdItem.value = currentTask.created;
@@ -149,45 +137,98 @@ containerNotes.addEventListener("click", function (event) {
   }
 });
 
-function getTask(rowId) {
-  return ourTasks.filter((item) => item.id === rowId)[0];
-}
-
 let editModal = document.querySelector(".container-tasks");
 editModal.addEventListener("click", function (event) {
   let target = event.target;
   if (target.id === "modal-edit") {
-    console.log(target);
-    let id = target.getAttribute("data-row-id");
-    let currentTask = getTask(id);
-    console.log(currentTask);
+    let currentTask = getTask(target.getAttribute("data-row-id"));
     let inputName = document.querySelector(".name-item").value;
     let inputCreated = document.querySelector(".created-item").value;
     let inputCategory = document.querySelector(".category-item").value;
     let inputContent = document.querySelector(".content-item").value;
     let inputData = document.querySelector(".dates-item").value;
 
-    ourTasks.forEach((obj) => {
-      if (obj.id === id) {
-        obj.name = inputName;
-        obj.created = inputCreated;
-        obj.category = inputCategory;
-        obj.content = inputContent;
-        obj.dates = inputData;
-      }
-    });
+    currentTask.name = inputName;
+    currentTask.created = inputCreated;
+    currentTask.category = inputCategory;
+    currentTask.content = inputContent;
+    currentTask.dates = inputData;
+    //modal.hide();
     render();
   }
 });
 
+containerNotes.addEventListener("click", function removeTasks(event) {
+  if (event.target.id === "basket") {
+    let rowId =
+      event.target.parentElement.parentElement.getAttribute("data-id");
+    let currentTask = getTask(rowId);
+    ourTasks = ourTasks.filter((obj) => obj.id !== currentTask.id);
+    render();
+  }
+});
+
+let archiveButton = document.getElementById("archive");
+
+tasks.addEventListener("click", function addToArchive(event) {
+  if (event.target.id === "archive") {
+    let row = event.target.parentElement.parentElement;
+    let id = row.getAttribute("data-id");
+    const archiveTask = getTask(id);
+    archiveTask.isArchive = true;
+
+    render();
+  }
+});
+
+archiveContainer.addEventListener("click", function getArchiveTasks(event) {
+  if (event.target.tagName === "BUTTON") {
+    renderArchive();
+  }
+});
+
+document.querySelector(".unarchive").addEventListener("click", function () {
+  let inputsCheckbox = document.querySelectorAll(".inputs-checkbox");
+  for (let i = 0; i < inputsCheckbox.length; i++) {
+    if (inputsCheckbox[i].checked) {
+      let row = inputsCheckbox[i].parentElement.parentElement;
+      const unArchiveTask = getTask(row.getAttribute("data-id"));
+      unArchiveTask.isArchive = false;
+    }
+  }
+  renderArchive();
+  render();
+});
+
+function getTask(rowId) {
+  return ourTasks.filter((item) => item.id === rowId)[0];
+}
+
 function render() {
   tasks = document.getElementById("tasks");
   tasks.replaceChildren();
-  uniqueTasks = new Set(ourTasks);
-  uniqueTasks.forEach((data) => {
-    const rowHTML = createRow(data);
-    tasks.innerHTML += rowHTML;
-  });
+
+  ourTasks
+    .filter((task) => !task.isArchive)
+    .forEach((data) => {
+      const rowHTML = createRow(data);
+      tasks.innerHTML += rowHTML;
+    });
+
+  activeTasks.textContent = ourTasks.filter((task) => !task.isArchive).length;
+  countArchiveTasks.textContent = ourTasks.filter(
+    (task) => task.isArchive
+  ).length;
+}
+
+function renderArchive() {
+  archiveTaskContainer.replaceChildren();
+  ourTasks
+    .filter((task) => task.isArchive)
+    .forEach((data) => {
+      const rowHTML = crateArchiveRow(data);
+      archiveTaskContainer.innerHTML += rowHTML;
+    });
 }
 
 function createRow(data) {
@@ -220,195 +261,35 @@ function createRow(data) {
   return rowHTML;
 }
 
-let bascket = document.getElementById("basket");
-
-containerNotes.addEventListener("click", function removeTasks(event) {
-  if (event.target.id === "basket") {
-    let col = event.target.parentElement;
-    let row = col.parentElement;
-    let rowId = row.getAttribute("data-id");
-    let currentTask = getTask(rowId);
-    ourTasks = ourTasks.filter((obj) => obj.id !== currentTask.id);
-    render();
-    activeTasks.textContent = ourTasks.length;
-  }
-});
-
-let archiveButton = document.getElementById("archive");
-let countArchiveTasks = document.querySelector(".archive-tasks");
-
-tasks.addEventListener("click", function addToArchive(event) {
-  if (event.target.id === "archive") {
-    let col = event.target.parentElement;
-    let row = col.parentElement;
-    let id = row.getAttribute("data-id");
-    let rowChildrenCollection = row.children;
-    let colImgTitle = rowChildrenCollection[0];
-    let imgTask = colImgTitle.children[0].src;
-    let titleTask = colImgTitle.children[1].innerHTML;
-    let colCreatedData = rowChildrenCollection[1];
-    let createdData = colCreatedData.children[0].innerHTML;
-    let colTask = rowChildrenCollection[2];
-    let category = colTask.children[0].innerHTML;
-    let rowContent = rowChildrenCollection[3];
-    let content = rowContent.children[0].innerHTML;
-    let colDate = rowChildrenCollection[4];
-    let spanDates = colDate.children[0].innerHTML;
-    arrTasksFromActiveToArchive.push({
-      name: titleTask,
-      created: createdData,
-      category: category,
-      content: content,
-      dates: spanDates,
-      id: id,
-      src: imgTask,
-      archive: archive,
-    });
-
-    let rowArchive = row.getAttribute("data-id");
-    let currentTaskArchive = getTask(rowArchive);
-    archiveArr.push(
-      ourTasks.filter((obj) => obj.id === currentTaskArchive.id)[0]
-    );
-    let colImagesTitle = row.firstElementChild;
-    let childrenColImagesTitle = colImagesTitle.children;
-    let img = childrenColImagesTitle[0].src;
-    let title = childrenColImagesTitle[1].innerHTML;
-    ourTasks = ourTasks.filter((obj) => obj.id !== currentTaskArchive.id);
-    render();
-    countArchiveTasks.textContent = archiveArr.length;
-    activeTasks.textContent = ourTasks.length;
-  }
-});
-
-archiveContainer.addEventListener("click", function getArchiveTasks(event) {
-  if (event.target.tagName === "BUTTON") {
-    console.log(removeTaskFromArchive);
-    if (removeTaskFromArchive) {
-      archiveTaskContainer.replaceChildren();
-      removeTaskFromArchive.forEach(function (obj) {
-        archiveTaskContainer.innerHTML += `
-        <div class='row row-items-able row-checkbox' data-id="${obj.id}">
-        <div class="col-2">
-          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
-          <span class="title">${obj.name}</span>
-        </div>
-        <div class="col-2">
-          <span class="created-data">${obj.created}</span>
-        </div>
-        <div class="col-2">
-          <span class="task">${obj.category}</span>
-        </div>
-        <div class="col-2">
-          <span class="content">${obj.content}</span>
-        </div>
-        <div class="col-2">
-          <span class="dates">${obj.dates}</span>
-        </div>
-        <div class="form-check col-2">
-    <input class="form-check-input inputs-checkbox" type="checkbox" value="">
-    
+function crateArchiveRow(obj) {
+  return `<div class='row row-items-able row-checkbox' data-id="${obj.id}">
+  <div class="col-2">
+    <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
+    <span class="title">${obj.name}</span>
   </div>
-  <div class="form-check">
-   
+  <div class="col-2">
+    <span class="created-data">${obj.created}</span>
   </div>
-      </div>
-        `;
-      });
-    } else {
-      arrTasksFromActiveToArchive.forEach(function (obj) {
-        archiveTaskContainer.innerHTML += `
-        <div class='row row-items-able row-checkbox' data-id="${obj.id}">
-        <div class="col-2">
-          <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
-          <span class="title">${obj.name}</span>
-        </div>
-        <div class="col-2">
-          <span class="created-data">${obj.created}</span>
-        </div>
-        <div class="col-2">
-          <span class="task">${obj.category}</span>
-        </div>
-        <div class="col-2">
-          <span class="content">${obj.content}</span>
-        </div>
-        <div class="col-2">
-          <span class="dates">${obj.dates}</span>
-        </div>
-        <div class="form-check col-2">
-    <input class="form-check-input inputs-checkbox" type="checkbox" value="">
-    
+  <div class="col-2">
+    <span class="task">${obj.category}</span>
   </div>
-  <div class="form-check">
+  <div class="col-2">
+    <span class="content">${obj.content}</span>
   </div>
-      </div>
-        `;
-        let uniqueElements = {};
-        let rowElements = document.querySelectorAll(".row-checkbox");
-        let uniqueRow = Array.from(rowElements);
-
-        for (let i = 0; i < uniqueRow.length; i++) {
-          let id = uniqueRow[i].getAttribute("data-id");
-          uniqueElements[id] = uniqueRow[i];
-        }
-        archiveTaskContainer.innerHTML = "";
-        for (let key in uniqueElements) {
-          archiveTaskContainer.appendChild(uniqueElements[key].cloneNode(true));
-        }
-      });
-    }
-  }
-});
-
-let unarchiveButton = document.querySelector(".unarchive");
-
-unarchiveButton.addEventListener("click", function () {
-  let inputsCheckbox = document.querySelectorAll(".inputs-checkbox");
-  for (let i = 0; i < inputsCheckbox.length; i++) {
-    if (inputsCheckbox[i].checked) {
-      let col = inputsCheckbox[i].parentElement;
-      let row = col.parentElement;
-      arrIdArchive.push(row.getAttribute("data-id"));
-    }
-  }
-  addTaskToActive = arrTasksFromActiveToArchive.filter((item) =>
-    arrIdArchive.includes(item.id)
-  );
-  addTaskToActive.forEach((item) => ourTasks.push(item));
-  removeTaskFromArchive = arrTasksFromActiveToArchive.filter(
-    (item) => !arrIdArchive.includes(item.id)
-  );
-  render();
-  archiveTaskContainer.replaceChildren();
-  removeTaskFromArchive.forEach(function (obj) {
-    archiveTaskContainer.innerHTML += `
-      <div class='row row-items-able row-checkbox' data-id="${obj.id}">
-      <div class="col-2">
-        <img src="images/icons/icones-notes/icons8-экологичные-технологии-48.png" class="img" />
-        <span class="title">${obj.name}</span>
-      </div>
-      <div class="col-2">
-        <span class="created-data">${obj.created}</span>
-      </div>
-      <div class="col-2">
-        <span class="task">${obj.category}</span>
-      </div>
-      <div class="col-2">
-        <span class="content">${obj.content}</span>
-      </div>
-      <div class="col-2">
-        <span class="dates">${obj.dates}</span>
-      </div>
-      <div class="form-check col-2">
-  <input class="form-check-input inputs-checkbox" type="checkbox" value="">
-
+  <div class="col-2">
+    <span class="dates">${obj.dates}</span>
   </div>
-  <div class="form-check">
+  <div class="form-check col-2">
+<input class="form-check-input inputs-checkbox" type="checkbox" value="">
 
-  </div>
-    </div>
-      `;
-  });
-  activeTasks.textContent = uniqueTasks.size;
-  countArchiveTasks.textContent = removeTaskFromArchive.length;
+</div>
+<div class="form-check">
+
+</div>
+</div>
+  `;
+}
+
+$(document).ready(function () {
+  $("#datepicker").datepicker();
 });
