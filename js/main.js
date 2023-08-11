@@ -1,4 +1,5 @@
 let buttonCreateTask = document.getElementById("send");
+let openCreateWindow = document.getElementById("button");
 let inputs = document.querySelectorAll("input");
 let rowItems = document.querySelector(".row-items-disable");
 let containerNotes = document.querySelector(".conteiner-notes");
@@ -7,9 +8,10 @@ let tasks = null;
 let checkOutArchiveTasks = document.querySelector(".archive-button");
 let archiveContainer = document.querySelector(".archive-dates");
 let archiveTaskContainer = document.querySelector(".archive-tasks-container");
-
+let editModal = document.querySelector(".container-tasks");
 let countArchiveTasks = document.querySelector(".archive-tasks");
 let activeTasks = document.querySelector(".active-tasks");
+let archiveButton = document.getElementById("archive");
 
 let ourTasks = [
   {
@@ -86,13 +88,19 @@ let ourTasks = [
 
 render();
 
+openCreateWindow.addEventListener("click", getCreateModalWindow);
 buttonCreateTask.addEventListener("click", createTask);
+containerNotes.addEventListener("click", editTasks);
+editModal.addEventListener("click", viewEditTasks);
+containerNotes.addEventListener("click", removeTasks);
+tasks.addEventListener("click", addToArchive);
+archiveContainer.addEventListener("click", getArchiveTasks);
+
+function getCreateModalWindow() {
+  $("#datepicker-create").datepicker();
+}
 
 function createTask() {
-  $(function () {
-    $("#datepicker").datepicker();
-  });
-
   let objNotes = {
     name: null,
     created: null,
@@ -110,13 +118,14 @@ function createTask() {
     }
   });
   ourTasks.push(objNotes);
+  $("#exampleModal").modal("hide");
 
   render();
 }
 
-containerNotes.addEventListener("click", function (event) {
+function editTasks(event) {
   if (event.target.id === "edit") {
-    let modal = new bootstrap.Modal(document.getElementById("exampleModa2"));
+    let modal = new bootstrap.Modal(document.getElementById("exampleModal2"));
     modal.show();
     let row = event.target.parentElement.parentElement;
     let rowId = row.getAttribute("data-id");
@@ -126,19 +135,17 @@ containerNotes.addEventListener("click", function (event) {
     let createdItem = document.querySelector(".created-item");
     let category = document.querySelector(".category-item");
     let content = document.querySelector(".content-item");
-    let date = document.querySelector(".dates-item");
-    date.id = "datepicker";
-
+    let date = document.getElementById("datapicker-edit");
+    $("#datapicker-edit").datepicker();
     inputName.value = currentTask.name;
     createdItem.value = currentTask.created;
     category.value = currentTask.category;
     content.value = currentTask.content;
     date.value = currentTask.dates;
   }
-});
+}
 
-let editModal = document.querySelector(".container-tasks");
-editModal.addEventListener("click", function (event) {
+function viewEditTasks(event) {
   let target = event.target;
   if (target.id === "modal-edit") {
     let currentTask = getTask(target.getAttribute("data-row-id"));
@@ -153,12 +160,12 @@ editModal.addEventListener("click", function (event) {
     currentTask.category = inputCategory;
     currentTask.content = inputContent;
     currentTask.dates = inputData;
-    //modal.hide();
+    $("#exampleModal2").modal("hide");
     render();
   }
-});
+}
 
-containerNotes.addEventListener("click", function removeTasks(event) {
+function removeTasks(event) {
   if (event.target.id === "basket") {
     let rowId =
       event.target.parentElement.parentElement.getAttribute("data-id");
@@ -166,11 +173,9 @@ containerNotes.addEventListener("click", function removeTasks(event) {
     ourTasks = ourTasks.filter((obj) => obj.id !== currentTask.id);
     render();
   }
-});
+}
 
-let archiveButton = document.getElementById("archive");
-
-tasks.addEventListener("click", function addToArchive(event) {
+function addToArchive(event) {
   if (event.target.id === "archive") {
     let row = event.target.parentElement.parentElement;
     let id = row.getAttribute("data-id");
@@ -179,13 +184,13 @@ tasks.addEventListener("click", function addToArchive(event) {
 
     render();
   }
-});
+}
 
-archiveContainer.addEventListener("click", function getArchiveTasks(event) {
+function getArchiveTasks(event) {
   if (event.target.tagName === "BUTTON") {
     renderArchive();
   }
-});
+}
 
 document.querySelector(".unarchive").addEventListener("click", function () {
   let inputsCheckbox = document.querySelectorAll(".inputs-checkbox");
@@ -289,7 +294,3 @@ function crateArchiveRow(obj) {
 </div>
   `;
 }
-
-$(document).ready(function () {
-  $("#datepicker").datepicker();
-});
